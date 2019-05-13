@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model IndexViewModel
+
+<div class="jumbotron">
+    <h1>URL-Cutter</h1>
+    <br />
+    <p>By entering in a URL in the text field below, we will create a short URL for you!</p>
+    <br />
+    @if (Model.StoredUrls.Count() == 0)
+    {
+       <h2>There is no one shortered URL here</h2>
+    }
+    else
+    {
+        <div class="container">
+            <h2>Cuttered URL</h2>
+            <p>Here you can see the processed URLs.</p>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Base URL</th>
+                    <th>Stored URL</th>
+                    <th>Creation date</th>
+                    <th>Transitions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach (var url in Model.StoredUrls)
+                     {
+                        <tr>
+                            <td>@url.BaseUrl</td>
+                            <td>
+                                <a asp-action="Transition"
+                                   asp-controller="Logic"
+                                   asp-route-id="@url.Id">
+                                    @url.ShortUrl
+                                </a>
+                            </td>
+                            <td>@url.CreationDate</td>
+                            <td>@url.Transition</td>
+                            <td>
+                                <a asp-action="Delete"
+                                   asp-controller="Logic"
+                                   asp-route-id="@url.Id"
+                                   class="btn btn-danger">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                     }
+                </tbody>
+            </table>
+        </div>
+    }
+    <form asp-action="Create" asp-controller="Logic">
+        <div class="form-horizontal">
+            <div class="input-group input-group-lg">
+                <input asp-for="ToCutUrl.BaseUrl" class="form-control" placeholder="Paste the URL to be cutted..." />
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Cut off URL</button>
+                </span>
+            </div>
+        </div>
+    </form>
+</div>
